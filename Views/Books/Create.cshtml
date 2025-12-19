@@ -1,0 +1,80 @@
+﻿@model Library_Management_System.Models.Book
+@{
+    ViewData["Title"] = "Add New Book";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h2>Add New Book</h2>
+        </div>
+        <div class="card-body">
+            <form asp-action="Create" method="post">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Title" class="form-label"></label>
+                    <input asp-for="Title" class="form-control" />
+                    <span asp-validation-for="Title" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Author" class="form-label"></label>
+                    <input asp-for="Author" class="form-control" />
+                    <span asp-validation-for="Author" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="ISBN" class="form-label"></label>
+                    <input asp-for="ISBN" class="form-control" />
+                    <span asp-validation-for="ISBN" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Genre" class="form-label"></label>
+                    <input asp-for="Genre" class="form-control" />
+                    <span asp-validation-for="Genre" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="PublicationYear" class="form-label"></label>
+                    <input asp-for="PublicationYear" class="form-control" type="number" />
+                    <span asp-validation-for="PublicationYear" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Quantity" class="form-label"></label>
+                    <input asp-for="Quantity" class="form-control" type="number" />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="AvailableQuantity" class="form-label"></label>
+                    <input asp-for="AvailableQuantity" class="form-control" type="number" />
+                    <span asp-validation-for="AvailableQuantity" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="Description" class="form-label"></label>
+                    <textarea asp-for="Description" class="form-control" rows="4"></textarea>
+                    <span asp-validation-for="Description" class="text-danger"></span>
+                </div>
+
+                <div class="form-group mb-3">
+                    <label asp-for="CoverImageUrl" class="form-label"></label>
+                    <input asp-for="CoverImageUrl" class="form-control" />
+                    <span asp-validation-for="CoverImageUrl" class="text-danger"></span>
+                </div>
+
+                <button type="submit" class="btn btn-success">Create Book</button>
+                <a asp-action="Index" class="btn btn-secondary">Cancel</a>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

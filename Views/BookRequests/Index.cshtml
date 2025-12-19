@@ -1,0 +1,107 @@
+﻿@model IEnumerable<Library_Management_System.Models.BookRequest>
+@{
+    ViewData["Title"] = "All Book Requests";
+}
+
+<div class="container mt-4">
+    <h1>All Book Requests (Admin)</h1>
+
+    @if (TempData["Success"] != null)
+    {
+        <div class="alert alert-success alert-dismissible fade show">
+            @TempData["Success"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (TempData["Error"] != null)
+    {
+        <div class="alert alert-danger alert-dismissible fade show">
+            @TempData["Error"]
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    }
+
+    @if (Model.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-striped table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Request Date</th>
+                        <th>User</th>
+                        <th>Book</th>
+                        <th>Status</th>
+                        <th>Due Date</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var request in Model)
+                    {
+                        <tr>
+                            <td>@request.RequestDate.ToString("MMM dd, yyyy")</td>
+                            <td>@request.User.FullName<br /><small>@request.User.Email</small></td>
+                            <td>@request.Book.Title<br /><small>by @request.Book.Author</small></td>
+                            <td>
+                                @if (request.Status == Library_Management_System.Models.RequestStatus.Pending)
+                                {
+                                    <span class="badge bg-warning">Pending</span>
+                                }
+                                else if (request.Status == Library_Management_System.Models.RequestStatus.Approved)
+                                {
+                                    <span class="badge bg-success">Approved</span>
+                                }
+                                else if (request.Status == Library_Management_System.Models.RequestStatus.Rejected)
+                                {
+                                    <span class="badge bg-danger">Rejected</span>
+                                }
+                                else if (request.Status == Library_Management_System.Models.RequestStatus.Returned)
+                                {
+                                    <span class="badge bg-info">Returned</span>
+                                }
+                            </td>
+                            <td>
+                                @if (request.DueDate.HasValue)
+                                {
+                                    @request.DueDate.Value.ToString("MMM dd, yyyy")
+                                }
+                                else
+                                {
+                                    <span>-</span>
+                                }
+                            </td>
+                            <td>
+                                @if (request.Status == Library_Management_System.Models.RequestStatus.Pending)
+                                {
+                                    <form asp-action="Approve" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@request.Id" />
+                                        <button type="submit" class="btn btn-sm btn-success">Approve</button>
+                                    </form>
+                                    <form asp-action="Reject" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@request.Id" />
+                                        <button type="submit" class="btn btn-sm btn-danger">Reject</button>
+                                    </form>
+                                }
+                                else if (request.Status == Library_Management_System.Models.RequestStatus.Approved)
+                                {
+                                    <form asp-action="MarkReturned" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@request.Id" />
+                                        <button type="submit" class="btn btn-sm btn-info">Mark Returned</button>
+                                    </form>
+                                }
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info">
+            <h4>No requests yet</h4>
+            <p>There are no book requests at this time.</p>
+        </div>
+    }
+</div>

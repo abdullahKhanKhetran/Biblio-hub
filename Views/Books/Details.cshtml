@@ -1,0 +1,68 @@
+﻿@model Library_Management_System.Models.Book
+@{
+    ViewData["Title"] = "Book Details";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header">
+            <h2>@Model.Title</h2>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                <div class="col-md-8">
+                    <dl class="row">
+                        <dt class="col-sm-3">Author</dt>
+                        <dd class="col-sm-9">@Model.Author</dd>
+
+                        <dt class="col-sm-3">ISBN</dt>
+                        <dd class="col-sm-9">@Model.ISBN</dd>
+
+                        <dt class="col-sm-3">Genre</dt>
+                        <dd class="col-sm-9">@Model.Genre</dd>
+
+                        <dt class="col-sm-3">Publication Year</dt>
+                        <dd class="col-sm-9">@Model.PublicationYear</dd>
+
+                        <dt class="col-sm-3">Total Copies</dt>
+                        <dd class="col-sm-9">@Model.Quantity</dd>
+
+                        <dt class="col-sm-3">Available Copies</dt>
+                        <dd class="col-sm-9">
+                            <span class="badge @(Model.AvailableQuantity > 0 ? "bg-success" : "bg-danger")">
+                                @Model.AvailableQuantity
+                            </span>
+                        </dd>
+
+                        <dt class="col-sm-3">Description</dt>
+                        <dd class="col-sm-9">@Model.Description</dd>
+                    </dl>
+
+                    @if (User.Identity?.IsAuthenticated == true && Model.AvailableQuantity > 0)
+                    {
+                        <form asp-controller="BookRequests" asp-action="Create" method="post">
+                            <input type="hidden" name="bookId" value="@Model.Id" />
+                            <button type="submit" class="btn btn-primary">Request This Book</button>
+                        </form>
+                    }
+                    else if (Model.AvailableQuantity == 0)
+                    {
+                        <div class="alert alert-warning">This book is currently unavailable.</div>
+                    }
+                    else
+                    {
+                        <div class="alert alert-info">Please <a asp-controller="Account" asp-action="Login">login</a> to request this book.</div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="card-footer">
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">Edit</a>
+                <a asp-action="Delete" asp-route-id="@Model.Id" class="btn btn-danger">Delete</a>
+            }
+            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+        </div>
+    </div>
+</div>
